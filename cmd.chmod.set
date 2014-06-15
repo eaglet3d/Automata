@@ -1,0 +1,22 @@
+#!/bin/bash
+#help cmd.chmod.set                              # Set the chmod for cmd scripts
+#Copyright (c) 2009 by Ralph A. Navarro Jr.
+#PH: +1508-287-0190
+
+$CMDENV
+
+#help      scriptName                            # Required. Name of script (cmd or env) to have chmod set.
+[ $# -lt 1 ] && { msg ERROR "Must supply name of script.  Exiting." ; exit 1 ; }
+scriptName="$1"
+
+msg BEGIN "$0 $*"
+cd $CMDBIN
+
+if (echo "$scriptName" | grep -q '\.env$') ; then
+    chmod 644 "$scriptName"
+else
+    chmod 755 "$scriptName"
+fi
+
+msg END "... done."
+

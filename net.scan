@@ -1,0 +1,5 @@
+#!/bin/bash
+#help net.scan                                   # Do a wireless scan of available access points
+
+sudo iwlist eth1 scan
+

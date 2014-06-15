@@ -1,0 +1,14 @@
+#!/bin/bash
+#help cmd.show                                   # Show the script making up a command
+#Copyright (c) 2007 by Ralph A. Navarro Jr.
+#PH: +1508-287-0190
+
+$CMDENV
+
+#help     <cmd>                                  # Required. Name of command to show
+[ $# -lt 1 ] && { msg ERROR "Must supply name of command to show.  Exiting." ; exit 1 ; }
+cmdName="$1"
+cmdPathName="${CMDBIN}/$cmdName"
+
+gview "$cmdPathName" || view "$cmdPathName" || cat "$cmdPathName"
+

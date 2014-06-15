@@ -1,0 +1,39 @@
+#!/bin/bash
+#help cmd.new                                    # Create a new command
+#Copyright (c) 2007 NavarroComputing
+#Author: Ralph A. Navarro Jr.
+#AuthorPH: +1508-287-0190
+#AuthorEmail: <ralph@navarrocomputing.com>
+#License: MIT OSI
+
+$CMDENV
+#set -x
+
+#help     <name>                                 # Required. Name of the new command
+[ $# -lt 1 ] && { msg ERROR "Must supply the new command name.  Exiting." ; exit 1 ; }
+name="$1"
+
+#help     <description>                          # Required. One line description of the new command
+[ $# -lt 2 ] && { msg ERROR "Must supply a one line description for the new command.  Exiting." ; exit 2 ; }
+# Escape any special meaning of '/' characters
+cmdDescription="$(echo "$2" | sed -e 's/\//\\\//g')"
+
+copyright="$(date +%Y)"
+author="Ralph A. Navarro Jr."
+authorPhone="+1508-287-0190"
+authorEmail="<ralph@navarrocomputing.com>"
+
+msg BEGIN "$0 $*"
+
+cd $CMDBIN
+sed -e 's/<cmdName>/'"$name"'/g' \
+    -e 's/<cmdDescription>/'"$cmdDescription"'/g' \
+    -e 's/<copyright>/'"$copyright"'/g' \
+    -e 's/<author>/'"$author"'/g' \
+    -e 's/<authorPhone>/'"$authorPhone"'/g' \
+    -e 's/<authorEmail>/'"$authorEmail"'/g' <cmd.template >"$name"
+
+cmd.edit "$name"
+#cmd.chmod.set "$name"
+
+msg END "... done."

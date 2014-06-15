@@ -1,0 +1,52 @@
+#!/bin/bash
+#help path.edit                                  # Edit the path environment variable.
+#Copyright (c) 2012 NavarroComputing
+#Author: Ralph A. Navarro Jr.
+#AuthorPH: +1508-287-0190
+#AuthorEmail: <ralph@navarrocomputing.com>
+#License: MIT OSI
+# Permission is hereby granted, free of charge, to any person obtaining
+# a copy of this software and associated documentation files (the "Software"), 
+# to deal in the Software without restriction, including without limitation the
+# rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+# sell copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE. 
+#
+$CMDENV
+
+cd "${CMDBIN}"
+# pathFile is a file that contains human readable paths (one per line).
+pathFile="path.file"
+# pathEnv is a file that contains machine readable paths (just one line).
+pathEnv="path.env"
+
+msg BEGIN "$0 $*"
+
+echo "pwd=$(pwd)"
+path.list >"${pathFile}"
+
+vim "${pathFile}"
+gawk 'BEGIN { RS="\n" ; FS="\n" ; printf( "export PATH=" ) } ; { printf( "%s:", $1 ) }' "${pathFile}" >"${pathEnv}"
+chmod 644 "${pathFile}"
+
+if [ -f "${pathEnv}" ] ; then
+  msg INFO "Created path in ${CMDBIN}/${pathEnv}"
+  rm "${pathFile}"
+else
+  msg ERROR "File ${pathEnv} did not get created.  Exiting."
+  exit 1
+fi
+
+msg END "... done."
+

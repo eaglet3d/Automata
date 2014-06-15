@@ -1,0 +1,22 @@
+#!/bin/bash
+#help cmd.copy                                   # Copy a cmd to another name
+#Copyright (c) 2009 by Ralph A. Navarro Jr.
+#PH: +1508-287-0190
+
+$CMDENV
+[ -z "$CMDBINDIR" ] && CMDBINDIR="$CMDBIN"
+
+msg BEGIN "$0 $*"
+
+#help     <sourceCmd>                            # Required.  The command to be copied from.
+#help     <targetCmd>                            # Required.  The command to be copied to.
+[ $# -lt 2 ] && { msg ERROR "Must supply <sourceCmd> and <targetCmd> of file to copy in \$CMDBINDIR.  Exiting." ; exit 1 ; }
+sourceCmd="$1" ; targetCmd="$2"
+
+cd $CMDBINDIR
+sed -e 's/'$sourceCmd'/'$targetCmd'/g' "$sourceCmd" >"$targetCmd"
+
+cmd.e "$targetCmd"
+
+msg END "... done."
+

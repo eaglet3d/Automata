@@ -1,0 +1,35 @@
+#!/bin/bash
+#help cmds.get                                   # Get the bin directory from heisenberg02
+#Copyright (c) 2009 NavarroComputing LLC
+#Author: Ralph A. Navarro Jr.
+#AuthorPH: +1508-287-0190
+#AuthorEmail: <ralph@navarrocomoputing.com>
+#License: MIT OSI
+
+$CMDENV
+
+[ -z "$CMDBIN" ] && { msg ERROR "CMDENV is not set.  Exiting." ; exit 1 ; }
+
+sourceLocation="heisenberg02:bin"
+[ "$sourceLocation" == "$(hostname):bin" ] && \
+    { msg INFO "$sourceLocation is self.  Nothing to get." ; exit 0 ; }
+
+#help     [--file|-f <file>]                     # Optional.  Specific filename to get.
+if [ $# -gt 1 ] && ( [ "$1" == "--file" ] || [ "$1" == "-f" ] ) ; then
+    sourceLocation="${sourceLocation}/$2"
+    shift 2
+else
+    sourceLocation="${sourceLocation}"
+fi
+
+#help     "[<option1> [<option2>] [...]]"        # Optional.  List of options to give to rsync.
+[ $# -gt 0 ] && options="$*" || options=""
+
+msg BEGIN "$0 $*"
+msg INFO "Getting $sourceLocation to $CMDBIN ..."
+
+cd "$CMDBIN"
+rsync -av $options $sourceLocation/ .
+
+msg END "... done."
+

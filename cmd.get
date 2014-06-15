@@ -1,0 +1,23 @@
+#!/bin/bash
+#help cmd.get                                    # Get the bin directory from specific server
+#Copyright (c) 2009 NavarroComputing LLC
+#Author: Ralph A. Navarro Jr.
+#AuthorPH: +1508-287-0190
+#AuthorEmail: <ralph@navarrocomoputing.com>
+#License: MIT OSI
+
+$CMDENV
+
+[ -z "$CMDBIN" ] && { msg ERROR "CMDENV is not set.  Exiting." ; exit 1 ; }
+
+sourceServer="h2"
+sourceDir="bin/*"
+
+msg BEGIN "$0 $*"
+msg INFO "Getting $sourceServer:$sourceDir into $CMDBIN ..."
+
+cd "$CMDBIN"
+rsync -av $1 $sourceServer:$sourceDir .
+
+msg END "... done."
+

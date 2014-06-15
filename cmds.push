@@ -1,0 +1,28 @@
+#!/bin/bash
+#help cmds.push                                  # Push the bin directory to all NavarroComputing Servers
+#Copyright (c) 2009 NavarroComputing LLC
+#Author: Ralph A. Navarro Jr.
+#AuthorPH: +1508-287-0190
+#AuthorEmail: <ralph@navarrocomoputing.com>
+#License: MIT OSI
+
+$CMDENV
+
+[ -z "$CMDBIN" ] && { msg ERROR "CMDENV is not set.  Exiting." ; exit 1 ; }
+
+options="$@"
+
+targetDestinations="h2:bin"
+
+msg BEGIN "$0 $*"
+
+for targetDestination in $targetDestinations
+do
+   if [ "$(hostname):bin" != "$targetDestination" ] ; then
+       msg INFO "Pushing ${CMDBIN}/ to $targetDestination ..."
+       rsync -av $options "${CMDBIN}/" "${targetDestination}/"
+   fi
+done
+
+msg END "... done."
+

@@ -1,0 +1,17 @@
+#!/bin/bash
+#help this.system.net.wireless.restart           # Restart the wireless network interfaces
+#Copyright (c) 2007 NavarroComputing
+#Author: Ralph A. Navarro Jr.
+#AuthorPH: +1508-287-0190
+#AuthorEmail: <ralph@navarrocomputing.com>
+#License: MIT OSI
+
+$CMDENV
+
+msg BEGIN "$0 $*"
+
+this.system.net.wireless.stop
+this.system.net.wireless.start
+
+msg END "... done."
+

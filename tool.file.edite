@@ -1,0 +1,17 @@
+#!/bin/bash
+#help tools.file.edit                            # Edit a file using preferred graphical interface when possible.
+#Copyright (c) 2009 by Ralph A. Navarro Jr.
+#PH: +1508-287-0190
+
+$CMDENV
+
+#help     <filePathName>                         # Path and name of file to be edited.
+[ $# -lt 1 ] && { msg ERROR "Must supply name of file to be edited.  Exiting." ; exit 1 ; }
+filePathName="$1"
+
+( msg BEGIN "$0 $*"
+
+  gedit "$filePathName" || gvim --nofork "$filePathName" || vim "$filePathName"
+
+  msg END "... done."
+) &

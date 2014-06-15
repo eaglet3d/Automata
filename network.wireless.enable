@@ -1,0 +1,4 @@
+#!/bin/bash
+
+sudo iwconfig eth1 essid wireless mode Managed channel auto
+

@@ -1,0 +1,33 @@
+#!/bin/bash
+#help tool.thisPC.docs.get                       # Generate page of links to all index.html docs on ths PC
+#Author: Ralph A. Navarro Jr.
+#AuthorPhone: +1(508)287-0190
+#AuthorEmail: ralph@navarrocomputing.com
+#AuthorWebSite: http://navarrocomputing.com/home
+#Copyright: (c) 2013 NavarroComputing LLC
+#License: MIT Open Source Initiative ( http://opensource.org/licenses/MIT )
+
+$CMDENV
+
+hostname=$(hostname)
+masterIndexFile="index.html"
+browser="firefox"
+
+msg BEGIN "$0 $*"
+
+locate index.html \
+    | gawk --assign hostname=${hostname} '
+        BEGIN { print "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 3.2//EN\">\n<html>" \
+                    "<title>" hostname " Application Docs</title>" \
+                    "<body>" \
+                    "<h1>" hostname "</h1>" \
+                    "<h2>Documentation for Installed Applications</h2>" \
+                    "<ul>" }
+              { print "<li><a href=\"file://" $0 "\">" $0 "</a></li>\n" }
+        END   { print "</ul></body></html>\n" }
+      ' \
+    | tidy -i -o "${masterIndexFile}"
+
+${browser} "${masterIndexFile}"
+
+msg END

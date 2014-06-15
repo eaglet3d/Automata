@@ -1,0 +1,44 @@
+#!/bin/bash
+#help tool.file.push                             # Push a cmd to all NavarroComputing Servers
+#Copyright (c) 2009 NavarroComputing LLC
+#Author: Ralph A. Navarro Jr.
+#AuthorPhone: +1(508)287-0190
+#AuthorEmail: <ralph@navarrocomputing.com>
+#License: MIT OSI, http://opensource.org/licenses/MIT
+#set -x
+
+$CMDENV
+
+msg BEGIN "$0 $*"
+
+[ -z "$CMDBIN" ] && { msg ERROR "CMDENV is not set.  Exiting." ; exit 1 ; }
+[ ! -d "$CMDBIN" ] && { msg ERROR "Local $CMDBIN does not exist.  Exiting." ; exit 2 ; }
+
+#help     <cmd>                                  # Required. Name of cmd to push
+[ $# -lt 1 ] && { msg ERROR "Must supply name of cmd to push.  Exiting." ; exit 1 ; }
+cmdFileName="$1"
+shift
+
+while [ -n "$1" ]
+do
+  case "$1" in
+    #help     [--rsync|-r "<option1> ..."]           # Optional. rsync options.
+    --opt|-o)
+      rsyncOptions="$1"
+      shift
+      ;;
+  esac
+done
+
+targetServers="h2 DrPC-11"
+targetDir="bin"
+
+for targetServer in $targetServers
+do
+    msg INFO "Pushing ${CMDBIN}/$cmdFileName to $targetServer:$targetDir ..."
+    msg INFO "rsync -av $rsyncOptions ${CMDBIN}/${cmdFileName} ${targetServer}:${targetDir}/"
+    rsync -av $rsyncOptions "${CMDBIN}/${cmdFileName}" ${targetServer}:"${targetDir}/"
+done
+
+msg END "... done."
+

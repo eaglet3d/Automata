@@ -1,0 +1,4 @@
+#!/bin/bash
+#help net.gc8x.start                             # Start the Sony/Ericsson GC83/84 data modem
+
+sudo kppp
